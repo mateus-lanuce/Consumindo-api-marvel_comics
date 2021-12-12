@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import url from "./utils/api";
+import axios from "axios";
 
-function App() {
+import NavBar from "./components/NavBar";
+import CardComponent from "./components/CardComponent";
+
+import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
+
+
+const App = () => {
+  const [ data, setData ] = useState(null);
+
+  useEffect(() => {
+    axios.get(url).then(response => setData(response.data.data)).catch((err) => console.log(err));
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <>
+        <NavBar />
+        {console.log(data)}
+        <Container>
+          <Grid container spacing={3} mt={1}>
+            {data?.results.map((comic => (
+              <Grid item xs={8} sm={3}>
+                <CardComponent data={comic}/>
+              </Grid>
+            )))}
+          </Grid>
+        </Container>
+      </>
   );
 }
 
